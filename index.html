@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amp Config Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-4">
+        <h1 class="mb-4">Amp Config Generator</h1>
+        <p class="text-body-secondary mb-4">Generate <code>~/.config/amp/settings.json</code> for <a href="https://ampcode.com">Ampcode</a></p>
+
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <ul class="nav nav-tabs mb-3" id="configTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button">General</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="permissions-tab" data-bs-toggle="tab" data-bs-target="#permissions" type="button">Permissions</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="mcp-tab" data-bs-toggle="tab" data-bs-target="#mcp" type="button">MCP Servers</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="theme-tab" data-bs-toggle="tab" data-bs-target="#theme" type="button">Theme</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button">Advanced</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="configTabsContent">
+                    <!-- General Settings -->
+                    <div class="tab-pane fade show active" id="general" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">General Settings</div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="thinkingEnabled" checked>
+                                        <label class="form-check-label" for="thinkingEnabled">Extended thinking</label>
+                                    </div>
+                                    <div class="form-text">Enable Claude's extended thinking capabilities</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="interleavedThinking">
+                                        <label class="form-check-label" for="interleavedThinking">Interleaved thinking</label>
+                                    </div>
+                                    <div class="form-text">Enable thinking between tool calls (experimental)</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="notificationsEnabled" checked>
+                                        <label class="form-check-label" for="notificationsEnabled">Notification sounds</label>
+                                    </div>
+                                    <div class="form-text">Play sounds when agent completes or is blocked</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="showCosts" checked>
+                                        <label class="form-check-label" for="showCosts">Show costs</label>
+                                    </div>
+                                    <div class="form-text">Show cost information for threads</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="tabClipboard" checked>
+                                        <label class="form-check-label" for="tabClipboard">Tab clipboard access</label>
+                                    </div>
+                                    <div class="form-text">Enable clipboard access for Amp Tab context</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="gitCoauthor" checked>
+                                        <label class="form-check-label" for="gitCoauthor">Git co-author trailer</label>
+                                    </div>
+                                    <div class="form-text">Add Co-authored-by: Amp to commits</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="gitThreadId" checked>
+                                        <label class="form-check-label" for="gitThreadId">Git thread trailer</label>
+                                    </div>
+                                    <div class="form-text">Add Amp-Thread URL to commits</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="updatesMode" class="form-label">Update mode (CLI)</label>
+                                    <select class="form-select" id="updatesMode">
+                                        <option value="auto">Auto</option>
+                                        <option value="warn">Warn</option>
+                                        <option value="disabled">Disabled</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="loadProfile" class="form-label">Shell profile loading</label>
+                                    <select class="form-select" id="loadProfile">
+                                        <option value="always">Always</option>
+                                        <option value="daily">Daily</option>
+                                        <option value="never">Never</option>
+                                    </select>
+                                    <div class="form-text">Load .bashrc/.zshrc/.envrc for commands</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="stopTimeout" class="form-label">Tool stop timeout (seconds)</label>
+                                    <input type="number" class="form-control" id="stopTimeout" value="300" min="1">
+                                    <div class="form-text">Seconds before canceling a running tool</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="toolsDisable" class="form-label">Disabled tools</label>
+                                    <input type="text" class="form-control" id="toolsDisable" placeholder="tool1, tool2, mcp__*">
+                                    <div class="form-text">Comma-separated list, supports globs</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="fuzzyPaths" class="form-label">Always include paths</label>
+                                    <input type="text" class="form-control" id="fuzzyPaths" placeholder="dist/**, node_modules/@myorg/**">
+                                    <div class="form-text">Globs for paths to include in @ search even if gitignored</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="skillsPath" class="form-label">Additional skills path</label>
+                                    <input type="text" class="form-control" id="skillsPath" placeholder="~/my-skills:/shared/team-skills">
+                                    <div class="form-text">Colon-separated paths to skill directories</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Permissions -->
+                    <div class="tab-pane fade" id="permissions" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>Tool Permissions</span>
+                                <button class="btn btn-sm btn-primary" onclick="addPermission()">Add Rule</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-text mb-3">Define rules for tool execution. Rules are evaluated in order.</div>
+                                <div id="permissionsList"></div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>MCP Permissions</span>
+                                <button class="btn btn-sm btn-primary" onclick="addMcpPermission()">Add Rule</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-text mb-3">Control which MCP servers can run.</div>
+                                <div id="mcpPermissionsList"></div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header">Global Override</div>
+                            <div class="card-body">
+                                <div class="mb-0">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="dangerouslyAllowAll">
+                                        <label class="form-check-label" for="dangerouslyAllowAll">Dangerously allow all</label>
+                                    </div>
+                                    <div class="form-text">Bypass all permission prompts. Only use in sandboxed environments.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MCP Servers -->
+                    <div class="tab-pane fade" id="mcp" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>MCP Servers</span>
+                                <button class="btn btn-sm btn-primary" onclick="addMcpServer()">Add Server</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-text mb-3">Configure Model Context Protocol servers for additional tools.</div>
+                                <div id="mcpServersList"></div>
+
+                                <div class="mt-3">
+                                    <p class="fw-semibold border-bottom pb-2 mb-3">Quick Add</p>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="addPresetMcp('playwright')">Playwright</button>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="addPresetMcp('filesystem')">Filesystem</button>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="addPresetMcp('context7')">Context7</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme -->
+                    <div class="tab-pane fade" id="theme" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">Terminal Theme</div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="terminalTheme" class="form-label">Theme</label>
+                                    <select class="form-select" id="terminalTheme">
+                                        <option value="">terminal (default)</option>
+                                        <option value="dark">dark</option>
+                                        <option value="light">light</option>
+                                        <option value="catppuccin-mocha">catppuccin-mocha</option>
+                                        <option value="solarized-dark">solarized-dark</option>
+                                        <option value="solarized-light">solarized-light</option>
+                                        <option value="gruvbox-dark-hard">gruvbox-dark-hard</option>
+                                        <option value="nord">nord</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3" id="customThemeInput" style="display: none;">
+                                    <label for="customThemeName" class="form-label">Custom theme name</label>
+                                    <input type="text" class="form-control" id="customThemeName" placeholder="my-theme">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings -->
+                    <div class="tab-pane fade" id="advanced" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">API Endpoints</div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="workerUrl" class="form-label">Worker URL</label>
+                                    <input type="text" class="form-control" id="workerUrl" placeholder="https://...">
+                                    <div class="form-text">Custom Cloudflare Worker URL for agent loop</div>
+                                </div>
+
+                                <div class="mb-0">
+                                    <label for="ampUrl" class="form-label">Amp URL</label>
+                                    <input type="text" class="form-control" id="ampUrl" placeholder="https://ampcode.com">
+                                    <div class="form-text">Override base API URL (or use AMP_URL env var)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>Custom Settings</span>
+                                <button class="btn btn-sm btn-primary" onclick="addCustomSetting()">Add Setting</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-text mb-3">Add custom or undocumented settings as key-value pairs.</div>
+                                <div id="customSettingsList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card sticky-top" style="top: 1rem;">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Config</span>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary me-2" onclick="handleImport()">Import</button>
+                            <input type="file" id="fileInput" accept=".json,application/json" onchange="importFromFile(event)" hidden>
+                            <button class="btn btn-sm btn-outline-secondary me-2" onclick="copyConfig()">Copy</button>
+                            <button class="btn btn-sm btn-primary" onclick="downloadConfig()">Download</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <textarea id="output" class="form-control font-monospace border-0 rounded-0" rows="20" spellcheck="false" style="resize: none;"></textarea>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <small class="text-body-secondary">Save as <code>~/.config/amp/settings.json</code></small>
+                        <button class="btn btn-sm btn-outline-danger" onclick="resetForm()">Reset</button>
+                    </div>
+                    <div id="importError" class="alert alert-danger m-3 mt-0 d-none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
